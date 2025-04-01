@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+production:
+  primary:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
+    prepared_statements: true
+    sslmode: <%= ENV['DB_SSL_MODE'] || 'prefer' %>
+
+  # Solid Queue requires this separate database
+  queue:
+    <<: *default
+    url: <%= ENV['QUEUE_DATABASE_URL'] || "#{ENV.fetch('DATABASE_URL', 'postgres://postgres:postgres@postgres:5432').sub(%r{/([^/]+)$}, '/solid_queue')}" %>
+    migrations_paths: db/solid_queue_migrate

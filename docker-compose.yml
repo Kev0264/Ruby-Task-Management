@@ -1,9 +1,12 @@
-version: "3.8"
-
 services:
   app:
     build: ./task-management-app
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    environment:
+      - REDIS_URL=redis://redis:6379/1
+      - ACTION_CABLE_ADAPTER=redis
+      - DATABASE_URL=postgres://postgres:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+      - QUEUE_DATABASE_URL=postgres://postgres:${DB_PASSWORD}@postgres:5432/solid_queue_${RAILS_ENV:-production}
     volumes:
       - ./app:/app
     env_file:
