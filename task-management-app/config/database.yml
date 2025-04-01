@@ -14,5 +14,5 @@ production:
   # Solid Queue requires this separate database
   queue:
     <<: *default
-    url: <%= ENV['QUEUE_DATABASE_URL'] || "#{ENV.fetch('DATABASE_URL', 'postgres://postgres:postgres@postgres:5432').sub(%r{/([^/]+)$}, '/solid_queue')}" %>
+    url: <%= ENV['SOLID_QUEUE_DATABASE_URL'] || "postgresql://postgres:#{ENV.fetch('DB_PASSWORD')}@postgres:5432/solid_queue_#{Rails.env}" %>
     migrations_paths: db/solid_queue_migrate

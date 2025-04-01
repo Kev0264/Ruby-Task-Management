@@ -60,25 +60,6 @@ services:
       timeout: 5s
       retries: 3
 
-  sidekiq:
-    build: ./task-management-app
-    command: bundle exec sidekiq -C config/sidekiq.yml
-    volumes:
-      - ./app:/app
-    env_file:
-      - .env
-    depends_on:
-      - postgres
-      - redis
-    networks:
-      - app_network
-    deploy:
-      replicas: 2
-      resources:
-        limits:
-          cpus: "0.3"
-          memory: 384M
-
   nginx:
     build: ./nginx
     ports:
